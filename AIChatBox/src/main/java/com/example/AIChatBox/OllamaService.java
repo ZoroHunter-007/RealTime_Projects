@@ -1,48 +1,50 @@
 package com.example.AIChatBox;
 
-
-
-
-
 import java.util.List;
-
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-
-import lombok.RequiredArgsConstructor;
-import reactor.core.publisher.Flux;
-
-
+import reactor.core.publisher.Mono;
 
 @Service
-@RequiredArgsConstructor
 public class OllamaService {
 
-    private final WebClient webClient;
-    private final OllamaConfig config;
+    private final WebClient webClient =
+            WebClient.create("http://localhost:11434");
 
-    public Flux<String> chatStream(String userMessage) {
+    public Mono<String> chat(String userMessage) {
 
-        // 🔥 NO MEMORY — clean prompt every time
-        List<OllamaRequest.Message> messages = List.of(
-        		new OllamaRequest.Message(
-        				  "system",
-        				  "You are a helpful assistant. Respond with proper spacing and readable sentences."
-        				),
-            new OllamaRequest.Message("user", userMessage)
-        );
+        // 1️⃣ SYSTEM MESSAGE (RULES FOR AI)
+        OllamaRequest.Message system =
+            new OllamaRequest.Message(
+                "system",
+                "Act like a close, friendly buddy chatting on WhatsApp. " +
+                		"Be relaxed, warm, and natural. " +
+                		"Use casual language like a real friend. " +
+                		"Reply in short numbered steps (max 3). " +
+                		"Each step should feel human and conversational. " +
+                		"Light emojis are allowed 🙂. " +
+                		"No formal tone. No paragraphs."
 
-        OllamaRequest request = new OllamaRequest(
-                config.getModel(),
-                messages,
-                true
-        );
+            );
 
+        // 2️⃣ USER MESSAGE
+        OllamaRequest.Message user =
+            new OllamaRequest.Message("user", userMessage);
+
+        // 3️⃣ BUILD REQUEST
+        OllamaRequest request =
+            new OllamaRequest(
+                "llama3",
+                List.of(system, user),
+                false
+            );
+
+        // 4️⃣ CALL OLLAMA
         return webClient.post()
-                .uri(config.getBaseUrl() + "/api/chat")
+                .uri("/api/chat")
                 .bodyValue(request)
                 .retrieve()
-                .bodyToFlux(OllamaResponse.class)
+                .bodyToMono(OllamaResponse.class)
                 .map(res -> res.getMessage().getContent());
     }
 }

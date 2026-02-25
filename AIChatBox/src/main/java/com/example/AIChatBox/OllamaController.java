@@ -1,25 +1,27 @@
 package com.example.AIChatBox;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import lombok.RequiredArgsConstructor;
-import reactor.core.publisher.Flux;
-
+import lombok.Data;
+import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Mono;
 
 @RestController
-@RequestMapping("/api/ollama")
-@RequiredArgsConstructor
 @CrossOrigin("*")
+@RequestMapping("/api/chat")
 public class OllamaController {
 
-    private final OllamaService ollamaService;
+    private final OllamaService service;
 
-    @PostMapping(value = "/chat-stream", produces = "text/event-stream")
-    public Flux<String> chatStream(@RequestBody ChatMessageRequest request) {
-        return ollamaService.chatStream(request.getMessage());
+    public OllamaController(OllamaService service) {
+        this.service = service;
     }
+
+    @PostMapping
+    public Mono<String> chat(@RequestBody ChatRequest request) {
+        return service.chat(request.getMessage());
+    }
+}
+
+@Data
+class ChatRequest {
+    private String message;
 }

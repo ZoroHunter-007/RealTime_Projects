@@ -1,0 +1,168 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #f4f6f8;
+    height: 100vh;
+}
+
+/* ===== Layout ===== */
+.layout {
+    display: flex;
+    height: 100vh;
+}
+
+/* ===== Sidebar ===== */
+.sidebar {
+    width: 260px;
+    background: #202123;
+    color: white;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* 🔥 IMPORTANT */
+
+    padding: 16px;
+}
+
+/* TOP */
+.sidebar-top {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.brand {
+    font-size: 18px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.new-chat {
+    width: 100%;
+    padding: 12px;
+    background: #343541;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.new-chat:hover {
+    background: #40414f;
+}
+
+/* MIDDLE (chat list later) */
+.sidebar-middle {
+    flex: 1;
+    margin-top: 20px;
+}
+
+/* BOTTOM (User Profile) */
+.sidebar-bottom {
+    border-top: 1px solid #333;
+    padding-top: 12px;
+}
+
+.user-profile {
+    padding: 10px 12px;
+    background: #343541;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.user-profile:hover {
+    background: #40414f;
+}
+
+/* ===== Chat Main ===== */
+.chat-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: #f4f6f8;
+}
+
+/* Chat Box */
+.chat-box {
+    flex: 1;
+    padding: 24px;
+    overflow-y: auto;
+
+    display: flex;              /* 🔥 ADD */
+    flex-direction: column;     /* 🔥 ADD */
+}
+
+
+/* ===== Messages ===== */
+.message {
+    padding: 12px 14px;
+    margin-bottom: 12px;
+    border-radius: 12px;
+
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    line-height: 1.6;
+
+    max-width: 70%;
+    width: fit-content;
+}
+
+.user {
+    background: #007bff;
+    color: white;
+    margin-left: auto;
+}
+
+.ai {
+    background: #e5e5e5;
+    color: black;
+    margin-right: auto;
+}
+
+.system {
+    background: #fff3cd;
+    color: #664d03;
+    border-left: 4px solid #ffc107;
+    font-size: 14px;
+}
+
+/* Thinking */
+.thinking {
+    font-style: italic;
+    opacity: 0.9;
+}
+
+/* ===== Chat Input ===== */
+.chat-input {
+    display: flex;
+    padding: 14px;
+    border-top: 1px solid #ccc;
+    background: white;
+}
+
+.chat-input textarea {
+    flex: 1;
+    resize: none;
+    padding: 10px;
+    height: 50px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+.chat-input button {
+    width: 56px;
+    margin-left: 10px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
