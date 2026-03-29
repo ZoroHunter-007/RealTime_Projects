@@ -110,11 +110,11 @@ public class ChatAgent {
             ));
         }
 
+    
         return geminiClient.generate(messages)
                 .flatMap(response -> {
-                    saveMessage(session, "AI", response);
                     updateTitleIfNeeded(session, latestMessage);
-                    return Mono.just(response);
+                    return Mono.just(response); 
                 });
     }
 

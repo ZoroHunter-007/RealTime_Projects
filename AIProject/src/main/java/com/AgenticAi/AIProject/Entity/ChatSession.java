@@ -6,11 +6,15 @@ import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "chat_session")
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class ChatSession {
 
     @Id

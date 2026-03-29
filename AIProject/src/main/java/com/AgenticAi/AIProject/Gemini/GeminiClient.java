@@ -34,16 +34,13 @@ public class GeminiClient {
 
         return call(primaryModel, messages)
         		.onErrorResume(WebClientResponseException.class, ex -> {
-        		    System.out.println("Status code: " + ex.getStatusCode());
-        		    System.out.println("Response body: " + ex.getResponseBodyAsString());
+        		    System.out.println("Status: " + ex.getStatusCode());
+        		    System.out.println("Body: " + ex.getResponseBodyAsString());
         		    return Mono.just("Gemini API error. Please try again later.");
         		})
-            .onErrorResume(WebClientResponseException.class, ex ->
-                Mono.just("Gemini API error. Please try again later.")
-            )
-            .onErrorResume(ex ->
-                Mono.just("System is busy. Please try again.")
-            );
+        		.onErrorResume(ex ->
+        		    Mono.just("System is busy. Please try again.")
+        		);
     }
 
     private Mono<String> call(String model, List<LLMMessage> messages) {

@@ -2,12 +2,16 @@ package com.AgenticAi.AIProject.Strategy;
 
 
 
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 
 import com.AgenticAi.AIProject.Executor.ExecutionContext;
+import com.AgenticAi.AIProject.Gemini.GeminiClient;
+import com.AgenticAi.AIProject.Gemini.LLMMessage;
 import com.AgenticAi.AIProject.Planner.PlanStep;
 import com.AgenticAi.AIProject.Planner.StepType;
-
+import com.AgenticAi.AIProject.Rules.AgentRules;
 
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
@@ -16,6 +20,8 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class ThinkStepStrategy implements StepExecutionStrategy {
 
+	private final GeminiClient geminiClient;
+	private final AgentRules agentRules;
 
 
     @Override
@@ -26,8 +32,14 @@ public class ThinkStepStrategy implements StepExecutionStrategy {
     @Override
     public Mono<String> execute(ExecutionContext context, PlanStep step) {
 
-        context.getVariables().put("reasoningTask", step.getInput());
-
-        return Mono.just("THINK_DONE");
+       String thinkingPrompt=agentRules.applyThinkingRules(step.getInput());
+       
+       List<LLMMessage>messages=List.of(
+    		   new LLMMessage("user", thinkingPrompt));
+       
+       return geminiClient.generate(messages)
+    		   .doOnNext(reasoning ->
+    		   context.getVariables().put("reasoningTask", reasoning)
+    		   );
     }
 }

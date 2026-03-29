@@ -4,11 +4,15 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "chat_messages")
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class ChatMessage {
 
     @Id
